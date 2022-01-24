@@ -8,9 +8,15 @@ const DocMenuConfig = [
         fontIcon: "bi-app-indicator",
       },
       {
-        heading: "layoutBuilder",
-        route: "/builder",
-        svgIcon: "media/icons/duotune/general/gen019.svg",
+        heading: "users",
+        route: "/users",
+        svgIcon: "media/icons/duotune/communication/com006.svg",
+        fontIcon: "bi-layers",
+      },
+      {
+        heading: "servers",
+        route: "/servers",
+        svgIcon: "media/icons/duotune/communication/com006.svg",
         fontIcon: "bi-layers",
       },
     ],
