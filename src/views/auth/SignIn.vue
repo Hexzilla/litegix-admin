@@ -159,7 +159,8 @@ export default defineComponent({
         // Send login request
         store
           .dispatch(Actions.LOGIN, values)
-          .then(() => {
+          .then((data) => {
+            console.log(data);
             Swal.fire({
               text: "All is cool! Now you submit this form",
               icon: "success",
@@ -175,7 +176,7 @@ export default defineComponent({
           })
           .catch(() => {
             Swal.fire({
-              text: store.getters.getErrors[0],
+              text: store.getters.getErrors,
               icon: "error",
               buttonsStyling: false,
               confirmButtonText: "Try again!",

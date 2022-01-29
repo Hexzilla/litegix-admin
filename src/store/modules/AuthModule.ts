@@ -12,14 +12,14 @@ export interface User {
 }
 
 export interface UserAuthInfo {
-  errors: Array<string>;
+  errors: string;
   user: User;
   isAuthenticated: boolean;
 }
 
 @Module
 export default class AuthModule extends VuexModule implements UserAuthInfo {
-  errors = [];
+  errors = "";
   user = {} as User;
   isAuthenticated = !!JwtService.getToken();
 
@@ -43,7 +43,7 @@ export default class AuthModule extends VuexModule implements UserAuthInfo {
    * Get authentification errors
    * @returns array
    */
-  get getErrors(): Array<string> {
+  get getErrors(): string {
     return this.errors;
   }
 
@@ -56,7 +56,7 @@ export default class AuthModule extends VuexModule implements UserAuthInfo {
   [Mutations.SET_AUTH](user) {
     this.isAuthenticated = true;
     this.user = user;
-    this.errors = [];
+    this.errors = "";
     JwtService.saveToken(this.user.token);
   }
 
@@ -74,20 +74,21 @@ export default class AuthModule extends VuexModule implements UserAuthInfo {
   [Mutations.PURGE_AUTH]() {
     this.isAuthenticated = false;
     this.user = {} as User;
-    this.errors = [];
+    this.errors = "";
     JwtService.destroyToken();
   }
 
   @Action
   [Actions.LOGIN](credentials) {
     return new Promise<void>((resolve, reject) => {
-      ApiService.post("login", credentials)
+      ApiService.post("admin/login", credentials)
         .then(({ data }) => {
           this.context.commit(Mutations.SET_AUTH, data);
           resolve();
         })
         .catch(({ response }) => {
-          this.context.commit(Mutations.SET_ERROR, response.data.errors);
+          console.log("response~~~~~~~~~~~", response);
+          this.context.commit(Mutations.SET_ERROR, response.data.message);
           reject();
         });
     });
@@ -107,7 +108,7 @@ export default class AuthModule extends VuexModule implements UserAuthInfo {
           resolve();
         })
         .catch(({ response }) => {
-          this.context.commit(Mutations.SET_ERROR, response.data.errors);
+          this.context.commit(Mutations.SET_ERROR, response.data.message);
           reject();
         });
     });
