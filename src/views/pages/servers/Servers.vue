@@ -1,107 +1,256 @@
 <template>
   <!--begin::Dashboard-->
-  <div class="row gy-5 g-xl-8">
-    <div class="col-xxl-4">
-      <MixedWidget2
-        widget-classes="card-xl-stretch mb-xl-8"
-        widget-color="danger"
-        chart-height="200"
-        stroke-color="#cb1e46"
-      ></MixedWidget2>
-    </div>
-    <div class="col-xxl-4">
-      <ListWidget5
-        widget-classes="card-xxl-stretch mb-5 mb-xl-10"
-      ></ListWidget5>
-    </div>
-    <div class="col-xxl-4">
-      <MixedWidget7
-        widget-classes="card-xxl-stretch-50 mb-5 mb-xl-8"
-        chart-color="primary"
-        chart-height="150"
-      ></MixedWidget7>
-      <MixedWidget10
-        widget-classes="card-xxl-stretch-50 mb-5 mb-xl-8"
-        chart-color="primary"
-        chart-height="168"
-      ></MixedWidget10>
-    </div>
-  </div>
-
   <div class="row gy-5 gx-xl-8">
-    <div class="col-xxl-4">
-      <ListWidget3 widget-classes="card-xxl-stretch mb-xl-3"></ListWidget3>
-    </div>
-    <div class="col-xxl-8">
-      <TableWidget9
-        widget-classes="card-xxl-stretch mb-5 mb-xl-8"
-      ></TableWidget9>
-    </div>
-  </div>
+    <div class="col-xxl-12">
+      <div class="card card-xxl-stretch mb-5 mb-xl-8">
+        <!--begin::Header-->
+        <div class="card-header border-0 pt-5">
+          <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bolder fs-3 mb-1">Servers</span>
 
-  <div class="row gy-5 g-xl-8">
-    <div class="col-xxl-4">
-      <ListWidget2 widget-classes="card-xl-stretch mb-xl-8"></ListWidget2>
-    </div>
-    <div class="col-xxl-4">
-      <ListWidget6 widget-classes="card-xl-stretch mb-xl-8"></ListWidget6>
-    </div>
-    <div class="col-xxl-4">
-      <ListWidget1 widget-classes="card-xxl-stretch mb-xl-3"></ListWidget1>
-    </div>
-  </div>
+            <span class="text-muted mt-1 fw-bold fs-7">Over 500 servers</span>
+          </h3>
 
-  <div class="row g-5 gx-xxl-8">
-    <div class="col-xxl-4">
-      <MixedWidget5
-        widget-classes="card-xl-stretch mb-xl-8"
-        chart-color="success"
-        chart-height="150"
-      ></MixedWidget5>
-    </div>
-    <div class="col-xxl-8">
-      <TableWidget5
-        widget-classes="card-xxl-stretch mb-5 mb-xxl-8"
-      ></TableWidget5>
+          <div
+            class="card-toolbar"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            data-bs-trigger="hover"
+            title="Click to add a user"
+          >
+            <a
+              href="#"
+              class="btn btn-sm btn-light-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#kt_modal_invite_friends"
+            >
+              <span class="svg-icon svg-icon-3">
+                <inline-svg src="media/icons/duotune/arrows/arr075.svg" />
+              </span>
+              New User
+            </a>
+          </div>
+        </div>
+        <!--end::Header-->
+
+        <!--begin::Body-->
+        <div class="card-body py-3">
+          <!--begin::Table container-->
+          <div class="table-responsive">
+            <!--begin::Table-->
+            <table
+              class="
+                table table-row-dashed table-row-gray-300
+                align-middle
+                gs-0
+                gy-4
+              "
+            >
+              <!--begin::Table head-->
+              <thead>
+                <tr class="fw-bolder text-muted">
+                  <th class="w-25px">
+                    <div
+                      class="
+                        form-check
+                        form-check-sm
+                        form-check-custom
+                        form-check-solid
+                      "
+                    >
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value="1"
+                      />
+                    </div>
+                  </th>
+                  <th class="min-w-150px">Name</th>
+                  <th class="min-w-140px">Address</th>
+                  <th class="min-w-120px">Web Server</th>
+                  <th class="min-w-120px">Database</th>
+                  <th class="min-w-100px text-end">Actions</th>
+                </tr>
+              </thead>
+              <!--end::Table head-->
+
+              <!--begin::Table body-->
+              <tbody>
+                <template v-for="(item, index) in serverList" :key="index">
+                  <tr>
+                    <td>
+                      <div
+                        class="
+                          form-check
+                          form-check-sm
+                          form-check-custom
+                          form-check-solid
+                        "
+                      >
+                        <input
+                          class="form-check-input widget-9-check"
+                          type="checkbox"
+                          :value="index"
+                        />
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <!-- <div class="symbol symbol-45px me-5">
+                          <img :src="item.image" alt="" />
+                        </div> -->
+                        <div class="d-flex justify-content-start flex-column">
+                          <a
+                            href="#"
+                            class="text-dark fw-bolder text-hover-primary fs-6"
+                            >{{ item.name }}</a
+                          >
+
+                          <span
+                            class="text-muted fw-bold text-muted d-block fs-7"
+                            >{{ item.skills }}</span
+                          >
+                        </div>
+                      </div>
+                    </td>
+
+                    <td class="text-end">
+                      <div class="d-flex flex-column w-100 me-2">
+                        <div class="d-flex flex-stack mb-2">
+                          <span class="text-muted me-2 fs-7 fw-bold">
+                            {{ item.address }}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>
+                      <a
+                        href="#"
+                        class="
+                          text-dark
+                          fw-bolder
+                          text-hover-primary
+                          d-block
+                          fs-6
+                        "
+                        >{{ item.webserver }}</a
+                      >
+                    </td>
+
+                    <td>
+                      <a
+                        href="#"
+                        class="
+                          text-dark
+                          fw-bolder
+                          text-hover-primary
+                          d-block
+                          fs-6
+                        "
+                        >{{ item.database }}</a
+                      >
+                    </td>
+
+                    <td class="text-end">
+                      <a
+                        href="#"
+                        class="
+                          btn
+                          btn-icon
+                          btn-bg-light
+                          btn-active-color-primary
+                          btn-sm
+                          me-1
+                        "
+                      >
+                        <span class="svg-icon svg-icon-3">
+                          <inline-svg
+                            src="media/icons/duotune/general/gen019.svg"
+                          />
+                        </span>
+                      </a>
+
+                      <a
+                        href="#"
+                        class="
+                          btn
+                          btn-icon
+                          btn-bg-light
+                          btn-active-color-primary
+                          btn-sm
+                          me-1
+                        "
+                      >
+                        <span class="svg-icon svg-icon-3">
+                          <inline-svg
+                            src="media/icons/duotune/art/art005.svg"
+                          />
+                        </span>
+                      </a>
+
+                      <a
+                        href="#"
+                        class="
+                          btn
+                          btn-icon
+                          btn-bg-light
+                          btn-active-color-primary
+                          btn-sm
+                        "
+                      >
+                        <span class="svg-icon svg-icon-3">
+                          <inline-svg
+                            src="media/icons/duotune/general/gen027.svg"
+                          />
+                        </span>
+                      </a>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+              <!--end::Table body-->
+            </table>
+            <!--end::Table-->
+          </div>
+          <!--end::Table container-->
+        </div>
+        <!--begin::Body-->
+      </div>
     </div>
   </div>
   <!--end::Dashboard-->
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
-import TableWidget9 from "@/components/widgets/tables/Widget9.vue";
-import TableWidget5 from "@/components/widgets/tables/Widget5.vue";
-import ListWidget1 from "@/components/widgets/lists/Widget1.vue";
-import ListWidget2 from "@/components/widgets/lists/Widget2.vue";
-import ListWidget3 from "@/components/widgets/lists/Widget3.vue";
-import ListWidget5 from "@/components/widgets/lists/Widget5.vue";
-import ListWidget6 from "@/components/widgets/lists/Widget6.vue";
-import MixedWidget2 from "@/components/widgets/mixed/Widget2.vue";
-import MixedWidget5 from "@/components/widgets/mixed/Widget5.vue";
-import MixedWidget7 from "@/components/widgets/mixed/Widget7.vue";
-import MixedWidget10 from "@/components/widgets/mixed/Widget10.vue";
+import { defineComponent } from "vue";
+import { Actions } from "@/store/enums/StoreEnums";
 import { setCurrentPageTitle } from "@/core/helpers/breadcrumb";
+import { useStore } from "vuex";
 
 export default defineComponent({
-  name: "dashboard",
-  components: {
-    TableWidget9,
-    TableWidget5,
-    ListWidget1,
-    ListWidget2,
-    ListWidget3,
-    ListWidget5,
-    ListWidget6,
-    MixedWidget2,
-    MixedWidget5,
-    MixedWidget7,
-    MixedWidget10,
+  name: "servers",
+  components: {},
+  data() {
+    return {
+      serverList: [],
+    };
   },
-  setup() {
-    onMounted(() => {
-      setCurrentPageTitle("Dashboard");
-    });
+  mounted() {
+    const store = useStore();
+    setCurrentPageTitle("Servers");
+    store
+      .dispatch(Actions.SERVER_LIST, { page: 1, size: 10 })
+      .then((data) => {
+        if (data.success) {
+          this.serverList = data.data.servers;
+        }
+        console.log("servers-success", data.data.servers);
+      })
+      .catch((data) => {
+        console.log("servers-catch", data);
+      });
   },
 });
 </script>

@@ -20,4 +20,20 @@ export default class AdminModule extends VuexModule {
       });
     }
   }
+
+  @Action
+  [Actions.SERVER_LIST](params) {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.query("admin/servers", { params })
+          .then(({ data }) => {
+            resolve(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
 }

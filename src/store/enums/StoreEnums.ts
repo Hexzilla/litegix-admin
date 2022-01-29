@@ -13,6 +13,7 @@ enum Actions {
   FORGOT_PASSWORD = "forgotPassword",
   SET_BREADCRUMB_ACTION = "setBreadcrumbAction",
   USER_LIST = "userList",
+  SERVER_LIST = "serverList",
 }
 
 enum Mutations {
