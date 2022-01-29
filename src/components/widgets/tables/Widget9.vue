@@ -4,9 +4,9 @@
     <!--begin::Header-->
     <div class="card-header border-0 pt-5">
       <h3 class="card-title align-items-start flex-column">
-        <span class="card-label fw-bolder fs-3 mb-1">Members Statistics</span>
+        <span class="card-label fw-bolder fs-3 mb-1">Users</span>
 
-        <span class="text-muted mt-1 fw-bold fs-7">Over 500 members</span>
+        <span class="text-muted mt-1 fw-bold fs-7">Over 500 users</span>
       </h3>
 
       <div
@@ -25,7 +25,7 @@
           <span class="svg-icon svg-icon-3">
             <inline-svg src="media/icons/duotune/arrows/arr075.svg" />
           </span>
-          New Member
+          New User
         </a>
       </div>
     </div>
@@ -56,7 +56,7 @@
                   <input class="form-check-input" type="checkbox" value="1" />
                 </div>
               </th>
-              <th class="min-w-150px">Authors</th>
+              <th class="min-w-150px">Name</th>
               <th class="min-w-140px">Company</th>
               <th class="min-w-120px">Progress</th>
               <th class="min-w-100px text-end">Actions</th>
