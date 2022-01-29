@@ -19,7 +19,10 @@ class ApiService {
   public static init(app: App<Element>) {
     ApiService.vueInstance = app;
     ApiService.vueInstance.use(VueAxios, axios);
-    ApiService.vueInstance.axios.defaults.baseURL = "http://localhost:3000";
+    ApiService.vueInstance.axios.defaults.baseURL =
+      process.env.NODE_ENV === "production"
+        ? "http://5.161.73.6:8080/"
+        : "http://localhost:3000";
   }
 
   /**
