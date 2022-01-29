@@ -154,41 +154,38 @@ export default defineComponent({
         submitButton.value.setAttribute("data-kt-indicator", "on");
       }
 
-      // Dummy delay
-      setTimeout(() => {
-        // Send login request
-        store
-          .dispatch(Actions.LOGIN, values)
-          .then((data) => {
-            console.log(data);
-            Swal.fire({
-              text: "All is cool! Now you submit this form",
-              icon: "success",
-              buttonsStyling: false,
-              confirmButtonText: "Ok, got it!",
-              customClass: {
-                confirmButton: "btn fw-bold btn-light-primary",
-              },
-            }).then(function () {
-              // Go to page after successfully login
-              router.push({ name: "dashboard" });
-            });
-          })
-          .catch(() => {
-            Swal.fire({
-              text: store.getters.getErrors,
-              icon: "error",
-              buttonsStyling: false,
-              confirmButtonText: "Try again!",
-              customClass: {
-                confirmButton: "btn fw-bold btn-light-danger",
-              },
-            });
+      // Send login request
+      store
+        .dispatch(Actions.LOGIN, values)
+        .then((data) => {
+          console.log(data);
+          Swal.fire({
+            text: "All is cool! Now you submit this form",
+            icon: "success",
+            buttonsStyling: false,
+            confirmButtonText: "Ok, got it!",
+            customClass: {
+              confirmButton: "btn fw-bold btn-light-primary",
+            },
+          }).then(function () {
+            // Go to page after successfully login
+            router.push({ name: "dashboard" });
           });
+        })
+        .catch(() => {
+          Swal.fire({
+            text: store.getters.getErrors,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Try again!",
+            customClass: {
+              confirmButton: "btn fw-bold btn-light-danger",
+            },
+          });
+        });
 
-        //Deactivate indicator
-        submitButton.value?.removeAttribute("data-kt-indicator");
-      }, 2000);
+      //Deactivate indicator
+      submitButton.value?.removeAttribute("data-kt-indicator");
     };
 
     return {

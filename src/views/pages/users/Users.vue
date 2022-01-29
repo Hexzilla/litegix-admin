@@ -66,8 +66,8 @@
                     </div>
                   </th>
                   <th class="min-w-150px">Name</th>
-                  <th class="min-w-140px">Company</th>
-                  <th class="min-w-120px">Progress</th>
+                  <th class="min-w-140px">Email</th>
+                  <th class="min-w-120px">Company</th>
                   <th class="min-w-100px text-end">Actions</th>
                 </tr>
               </thead>
@@ -75,7 +75,7 @@
 
               <!--begin::Table body-->
               <tbody>
-                <template v-for="(item, index) in list" :key="index">
+                <template v-for="(item, index) in userList" :key="index">
                   <tr>
                     <td>
                       <div
@@ -96,20 +96,30 @@
 
                     <td>
                       <div class="d-flex align-items-center">
-                        <div class="symbol symbol-45px me-5">
+                        <!-- <div class="symbol symbol-45px me-5">
                           <img :src="item.image" alt="" />
-                        </div>
+                        </div> -->
                         <div class="d-flex justify-content-start flex-column">
                           <a
                             href="#"
                             class="text-dark fw-bolder text-hover-primary fs-6"
-                            >{{ item.name }}</a
+                            >{{ item.username }}</a
                           >
 
                           <span
                             class="text-muted fw-bold text-muted d-block fs-7"
                             >{{ item.skills }}</span
                           >
+                        </div>
+                      </div>
+                    </td>
+
+                    <td class="text-end">
+                      <div class="d-flex flex-column w-100 me-2">
+                        <div class="d-flex flex-stack mb-2">
+                          <span class="text-muted me-2 fs-7 fw-bold">
+                            {{ item.email }}
+                          </span>
                         </div>
                       </div>
                     </td>
@@ -130,28 +140,6 @@
                         class="text-muted fw-bold text-muted d-block fs-7"
                         >{{ item.companySkills }}</span
                       >
-                    </td>
-
-                    <td class="text-end">
-                      <div class="d-flex flex-column w-100 me-2">
-                        <div class="d-flex flex-stack mb-2">
-                          <span class="text-muted me-2 fs-7 fw-bold">
-                            {{ item.value }}%
-                          </span>
-                        </div>
-
-                        <div class="progress h-6px w-100">
-                          <div
-                            class="progress-bar"
-                            :class="`bg-${item.color}`"
-                            role="progressbar"
-                            :style="{ width: item.value + '%' }"
-                            :aria-valuenow="item.value"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
                     </td>
 
                     <td class="text-end">
@@ -225,71 +213,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent } from "vue";
+import { Actions } from "@/store/enums/StoreEnums";
 import { setCurrentPageTitle } from "@/core/helpers/breadcrumb";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "users",
   components: {},
-  setup() {
-    onMounted(() => {
-      setCurrentPageTitle("Users");
-    });
-
-    const checked = ref(false);
-
-    const list = [
-      {
-        image: "media/avatars/150-11.jpg",
-        name: "Ana Simmons",
-        skills: "HTML, JS, ReactJS",
-        companyName: "Intertico",
-        companySkills: "Web, UI/UX Design",
-        value: "50",
-        color: "primary",
-      },
-      {
-        image: "media/avatars/150-3.jpg",
-        name: "Jessie Clarcson",
-        skills: "C#, ASP.NET, MS SQL",
-        companyName: "Agoda",
-        companySkills: "Houses & Hotels",
-        value: "70",
-        color: "danger",
-      },
-      {
-        image: "media/avatars/150-4.jpg",
-        name: "Lebron Wayde",
-        skills: "PHP, Laravel, VueJS",
-        companyName: "RoadGee",
-        companySkills: "Transportation",
-        value: "60",
-        color: "success",
-      },
-      {
-        image: "media/avatars/150-5.jpg",
-        name: "Natali Goodwin",
-        skills: "Python, PostgreSQL, ReactJS",
-        companyName: "The Hill",
-        companySkills: "Insurance",
-        value: "50",
-        color: "warning",
-      },
-      {
-        image: "media/avatars/150-6.jpg",
-        name: "Kevin Leonard",
-        skills: "HTML, JS, ReactJS",
-        companyName: "RoadGee",
-        companySkills: "Art Director",
-        value: "90",
-        color: "info",
-      },
-    ];
-
+  data() {
     return {
-      list,
-      checked,
+      userList: [],
     };
+  },
+  mounted() {
+    const store = useStore();
+    setCurrentPageTitle("Users");
+    store
+      .dispatch(Actions.USER_LIST, { page: 1, size: 10 })
+      .then((data) => {
+        if (data.success) {
+          this.userList = data.data.users;
+        }
+        console.log("users-success", data.data.users);
+      })
+      .catch((data) => {
+        console.log("users-catch", data);
+      });
   },
 });
 </script>

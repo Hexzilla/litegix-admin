@@ -241,7 +241,7 @@ router.beforeEach(() => {
   // reset config to initial state
   store.commit(Mutations.RESET_LAYOUT_CONFIG);
 
-  store.dispatch(Actions.VERIFY_AUTH);
+  //store.dispatch(Actions.VERIFY_AUTH); //TODO
 
   // Scroll page to top on every route change
   setTimeout(() => {
