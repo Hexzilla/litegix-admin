@@ -12,7 +12,7 @@ export default class AdminModule extends VuexModule {
       return new Promise<void>((resolve, reject) => {
         ApiService.query("admin/users", { params })
           .then(({ data }) => {
-            resolve(data);
+            data.success ? resolve(data.data) : reject(data);
           })
           .catch(({ response }) => {
             reject(response.data);

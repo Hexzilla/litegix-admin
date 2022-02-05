@@ -420,8 +420,8 @@ export default defineComponent({
       }
     };
 
-    const countries = [];
-    const timezones = [];
+    const countries = ref([]);
+    const timezones = ref([]);
 
     onMounted(() => {
       setCurrentPageBreadcrumbs("Create", ["Users"]);
@@ -429,8 +429,8 @@ export default defineComponent({
       store
         .dispatch(Actions.NEW_USER)
         .then((data) => {
-          countries.push.apply(countries, data.countries);
-          timezones.push.apply(timezones, data.timezones);
+          countries.value = data.countries;
+          timezones.value = data.timezones;
         })
         .catch((data) => {
           console.error("error", data);

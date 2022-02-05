@@ -202,6 +202,14 @@
             <!--end::Table-->
           </div>
           <!--end::Table container-->
+
+          <Pagination
+            :page="pageNumber"
+            :size="pageSize"
+            :total="totalCount"
+            @update="updatePage"
+          >
+          </Pagination>
         </div>
         <!--begin::Body-->
       </div>
@@ -211,32 +219,55 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import { Actions } from "@/store/enums/StoreEnums";
 import { setCurrentPageTitle } from "@/core/helpers/breadcrumb";
 import { useStore } from "vuex";
+import Pagination from "@/components/Pagination.vue";
 
 export default defineComponent({
   name: "users",
-  components: {},
-  data() {
-    return {
-      userList: [],
-    };
+  components: {
+    Pagination,
   },
-  mounted() {
+  setup() {
     const store = useStore();
-    setCurrentPageTitle("Users");
-    store
-      .dispatch(Actions.USER_LIST, { page: 1, size: 10 })
-      .then((data) => {
-        if (data.success) {
-          this.userList = data.data.users;
-        }
-      })
-      .catch((data) => {
-        console.error("error", data);
-      });
+
+    const userList = ref([]);
+    const pageNumber = ref(1);
+    const pageSize = ref(5);
+    const totalCount = ref(0);
+
+    const updatePage = (page: number) => {
+      console.log("updatePage", page);
+
+      store
+        .dispatch(Actions.USER_LIST, {
+          page: page,
+          size: 5,
+        })
+        .then((data) => {
+          userList.value = data.users;
+          totalCount.value = data.total;
+          pageNumber.value = data.page;
+        })
+        .catch((data) => {
+          console.error("error", data);
+        });
+    };
+
+    onMounted(() => {
+      setCurrentPageTitle("Users");
+      updatePage(1);
+    });
+
+    return {
+      userList,
+      totalCount,
+      pageNumber,
+      pageSize,
+      updatePage,
+    };
   },
 });
 </script>
