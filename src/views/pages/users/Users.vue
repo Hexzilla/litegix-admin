@@ -18,17 +18,15 @@
             data-bs-trigger="hover"
             title="Click to add a user"
           >
-            <a
-              href="#"
+            <router-link
+              to="/users/create"
               class="btn btn-sm btn-light-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#kt_modal_invite_friends"
             >
               <span class="svg-icon svg-icon-3">
                 <inline-svg src="media/icons/duotune/arrows/arr075.svg" />
               </span>
               New User
-            </a>
+            </router-link>
           </div>
         </div>
         <!--end::Header-->
@@ -235,10 +233,9 @@ export default defineComponent({
         if (data.success) {
           this.userList = data.data.users;
         }
-        console.log("users-success", data.data.users);
       })
       .catch((data) => {
-        console.log("users-catch", data);
+        console.error("error", data);
       });
   },
 });
