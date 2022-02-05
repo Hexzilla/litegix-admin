@@ -25,7 +25,7 @@
         id="kt_account_profile_details_form"
         class="form"
         novalidate="novalidate"
-        @submit="saveChanges1()"
+        @submit="createUser()"
         :validation-schema="profileDetailsValidator"
       >
         <!--begin::Card body-->
@@ -68,7 +68,7 @@
             <!--begin::Col-->
             <div class="col-lg-8 fv-row">
               <Field
-                type="text"
+                type="email"
                 name="email"
                 class="form-control form-control-lg form-control-solid"
                 placeholder="Email"
@@ -77,6 +77,33 @@
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
                   <ErrorMessage name="email" />
+                </div>
+              </div>
+            </div>
+            <!--end::Col-->
+          </div>
+          <!--end::Input group-->
+
+          <!--begin::Input group-->
+          <div class="row mb-6">
+            <!--begin::Label-->
+            <label class="col-lg-4 col-form-label required fw-bold fs-6"
+              >Password</label
+            >
+            <!--end::Label-->
+
+            <!--begin::Col-->
+            <div class="col-lg-8 fv-row">
+              <Field
+                type="password"
+                name="password"
+                class="form-control form-control-lg form-control-solid"
+                placeholder="Password"
+                v-model="profileDetails.password"
+              />
+              <div class="fv-plugins-message-container">
+                <div class="fv-help-block">
+                  <ErrorMessage name="password" />
                 </div>
               </div>
             </div>
@@ -267,16 +294,11 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as Yup from "yup";
 
 interface ProfileDetails {
-  avatar: string;
-  name: string;
-  surname: string;
   email: string;
   username: string;
+  password: string;
   company: string;
-  contactPhone: string;
-  companySite: string;
   country: string;
-  language: string;
   timezone: string;
   currency: string;
 }
@@ -289,11 +311,8 @@ export default defineComponent({
     Form,
   },
   setup() {
+    const store = useStore();
     const submitButton1 = ref<HTMLElement | null>(null);
-    const submitButton2 = ref<HTMLElement | null>(null);
-    const submitButton3 = ref<HTMLElement | null>(null);
-    const submitButton4 = ref<HTMLElement | null>(null);
-    const submitButton5 = ref<HTMLElement | null>(null);
     const updateEmailButton = ref<HTMLElement | null>(null);
     const updatePasswordButton = ref<HTMLElement | null>(null);
 
@@ -301,9 +320,7 @@ export default defineComponent({
     const passwordFormDisplay = ref(false);
 
     const profileDetailsValidator = Yup.object().shape({
-      fname: Yup.string().required().label("First name"),
-      lname: Yup.string().required().label("Last name"),
-      email: Yup.string().required().label("Email"),
+      email: Yup.string().required().email().label("Email"),
       username: Yup.string().required().label("Username"),
       company: Yup.string().label("Company"),
       country: Yup.string().required().label("Country"),
@@ -327,28 +344,41 @@ export default defineComponent({
     });
 
     const profileDetails = ref<ProfileDetails>({
-      avatar: "media/avatars/150-2.jpg",
-      name: "Max",
-      surname: "Smith",
       email: "",
       username: "",
+      password: "",
       company: "",
-      contactPhone: "044 3276 454 935",
-      companySite: "keenthemes.com",
       country: "IN",
-      language: "msa",
       timezone: "Kuala Lumpur",
       currency: "USD",
     });
 
-    const saveChanges1 = () => {
+    const createUser = () => {
       if (submitButton1.value) {
         // Activate indicator
         submitButton1.value.setAttribute("data-kt-indicator", "on");
 
-        setTimeout(() => {
-          submitButton1.value?.removeAttribute("data-kt-indicator");
-        }, 2000);
+        store
+          .dispatch(Actions.CREATE_USER, profileDetails.value)
+          .then((data) => {
+            console.log("success", data);
+
+            Swal.fire({
+              text: "User has successfuly created",
+              icon: "success",
+              buttonsStyling: false,
+              confirmButtonText: "Ok, got it!",
+              customClass: {
+                confirmButton: "btn fw-bold btn-light-primary",
+              },
+            });
+          })
+          .catch((data) => {
+            console.error("error", data);
+          })
+          .finally(() => {
+            submitButton1.value?.removeAttribute("data-kt-indicator");
+          });
       }
     };
 
@@ -390,24 +420,17 @@ export default defineComponent({
       }
     };
 
-    const removeImage = () => {
-      profileDetails.value.avatar = "media/avatars/blank.png";
-    };
-
     const countries = [];
     const timezones = [];
 
     onMounted(() => {
-      setCurrentPageBreadcrumbs("Settings", ["Account"]);
+      setCurrentPageBreadcrumbs("Create", ["Users"]);
 
-      const store = useStore();
       store
         .dispatch(Actions.NEW_USER)
         .then((data) => {
-          if (data.success) {
-            countries.push.apply(countries, data.data.countries);
-            timezones.push.apply(timezones, data.data.timezones);
-          }
+          countries.push.apply(countries, data.countries);
+          timezones.push.apply(timezones, data.timezones);
         })
         .catch((data) => {
           console.error("error", data);
@@ -416,17 +439,12 @@ export default defineComponent({
 
     return {
       submitButton1,
-      submitButton2,
-      submitButton3,
-      submitButton4,
-      submitButton5,
-      saveChanges1,
+      createUser,
       countries,
       timezones,
       profileDetails,
       emailFormDisplay,
       passwordFormDisplay,
-      removeImage,
       profileDetailsValidator,
       changeEmail,
       changePassword,

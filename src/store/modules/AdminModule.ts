@@ -28,7 +28,23 @@ export default class AdminModule extends VuexModule {
       return new Promise<void>((resolve, reject) => {
         ApiService.get("admin/users/new")
           .then(({ data }) => {
-            resolve(data);
+            data.success ? resolve(data.data) : reject(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
+
+  @Action
+  [Actions.CREATE_USER](payload) {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.post("admin/users", payload)
+          .then(({ data }) => {
+            data.success ? resolve(data.data) : reject(data);
           })
           .catch(({ response }) => {
             reject(response.data);

@@ -14,6 +14,7 @@ enum Actions {
   SET_BREADCRUMB_ACTION = "setBreadcrumbAction",
   USER_LIST = "userList",
   NEW_USER = "newUser",
+  CREATE_USER = "createUser",
   SERVER_LIST = "serverList",
 }
 
