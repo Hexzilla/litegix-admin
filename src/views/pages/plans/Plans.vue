@@ -6,10 +6,8 @@
         <!--begin::Header-->
         <div class="card-header border-0 pt-5">
           <h3 class="card-title align-items-start flex-column">
-            <span class="card-label fw-bolder fs-3 mb-1">Users</span>
-
-            <span class="text-muted mt-1 fw-bold fs-7"
-              >Total {{ totalCount }} users</span
+            <span class="card-label fw-bolder fs-3 mb-1"
+              >Subscription Plans</span
             >
           </h3>
 
@@ -21,13 +19,13 @@
             title="Click to add a user"
           >
             <router-link
-              to="/users/create"
+              to="/plans/create"
               class="btn btn-sm btn-light-primary"
             >
               <span class="svg-icon svg-icon-3">
                 <inline-svg src="media/icons/duotune/arrows/arr075.svg" />
               </span>
-              New User
+              New Subscription
             </router-link>
           </div>
         </div>
@@ -66,8 +64,8 @@
                     </div>
                   </th>
                   <th class="min-w-150px">Name</th>
-                  <th class="min-w-140px">Email</th>
-                  <th class="min-w-120px">Company</th>
+                  <th class="min-w-140px">Price</th>
+                  <th class="min-w-120px">Created Date</th>
                   <th class="min-w-100px text-end">Actions</th>
                 </tr>
               </thead>
@@ -75,7 +73,7 @@
 
               <!--begin::Table body-->
               <tbody>
-                <template v-for="(user, index) in userList" :key="index">
+                <template v-for="(item, index) in plans" :key="index">
                   <tr>
                     <td>
                       <div
@@ -96,20 +94,10 @@
 
                     <td>
                       <div class="d-flex align-items-center">
-                        <!-- <div class="symbol symbol-45px me-5">
-                          <img :src="user.image" alt="" />
-                        </div> -->
                         <div class="d-flex justify-content-start flex-column">
-                          <a
-                            href="#"
-                            class="text-dark fw-bolder text-hover-primary fs-6"
-                            >{{ user.username }}</a
-                          >
-
-                          <span
-                            class="text-muted fw-bold text-muted d-block fs-7"
-                            >{{ user.skills }}</span
-                          >
+                          <span class="fw-bold d-block fs-7">
+                            {{ item.name }}
+                          </span>
                         </div>
                       </div>
                     </td>
@@ -117,50 +105,20 @@
                     <td class="text-end">
                       <div class="d-flex flex-column w-100 me-2">
                         <div class="d-flex flex-stack mb-2">
-                          <span class="text-muted me-2 fs-7 fw-bold">
-                            {{ user.email }}
+                          <span class="fw-bold d-block fs-7">
+                            {{ item.price }}
                           </span>
                         </div>
                       </div>
                     </td>
 
                     <td>
-                      <a
-                        href="#"
-                        class="
-                          text-dark
-                          fw-bolder
-                          text-hover-primary
-                          d-block
-                          fs-6
-                        "
-                        >{{ user.companyName }}</a
-                      >
-                      <span
-                        class="text-muted fw-bold text-muted d-block fs-7"
-                        >{{ user.companySkills }}</span
-                      >
+                      <span class="fw-bold d-block fs-7">{{
+                        item.createdAt
+                      }}</span>
                     </td>
 
                     <td class="text-end">
-                      <a
-                        href="#"
-                        class="
-                          btn
-                          btn-icon
-                          btn-bg-light
-                          btn-active-color-primary
-                          btn-sm
-                          me-1
-                        "
-                      >
-                        <span class="svg-icon svg-icon-3">
-                          <inline-svg
-                            src="media/icons/duotune/general/gen019.svg"
-                          />
-                        </span>
-                      </a>
-
                       <a
                         href="#"
                         class="
@@ -188,7 +146,7 @@
                           btn-active-color-primary
                           btn-sm
                         "
-                        v-on:click="deleteUser($event, user)"
+                        v-on:click="deletePlan($event, item)"
                       >
                         <span class="svg-icon svg-icon-3">
                           <inline-svg
@@ -205,14 +163,6 @@
             <!--end::Table-->
           </div>
           <!--end::Table container-->
-
-          <Pagination
-            :page="pageNumber"
-            :size="pageSize"
-            :total="totalCount"
-            @update="updatePage"
-          >
-          </Pagination>
         </div>
         <!--begin::Body-->
       </div>
@@ -227,49 +177,39 @@ import { Actions } from "@/store/enums/StoreEnums";
 import { setCurrentPageTitle } from "@/core/helpers/breadcrumb";
 import { useStore } from "vuex";
 import { showConfirmMsgbox, showSuccessMsgbox } from "@/views/msgbox.js";
-import Pagination from "@/components/Pagination.vue";
+
+interface Plan {
+  id: string;
+  name: string;
+  price: number;
+  createdAt: string;
+}
 
 export default defineComponent({
-  name: "users",
-  components: {
-    Pagination,
-  },
+  name: "plans",
+  components: {},
   setup() {
     const store = useStore();
 
-    const userList = ref([]);
-    const pageNumber = ref(1);
-    const pageSize = ref(5);
-    const totalCount = ref(0);
+    const plans = ref<Plan[]>([]);
 
-    const updatePage = (page: number) => {
-      console.log("updatePage", page);
-
-      store
-        .dispatch(Actions.USER_LIST, {
-          page: page,
-          size: 5,
-        })
-        .then((data) => {
-          userList.value = data.users;
-          totalCount.value = data.total;
-          pageNumber.value = data.page;
-        })
-        .catch((data) => {
-          console.error("error", data);
-        });
-    };
-
-    const deleteUser = (e: Event, user) => {
+    const deletePlan = (e: Event, plan) => {
       e.preventDefault();
 
-      showConfirmMsgbox("Do you want to suspend selected user?").then((res) => {
+      showConfirmMsgbox("Do you want to delete the plan?").then((res) => {
         if (res.isConfirmed) {
           store
-            .dispatch(Actions.DELETE_USER, user.id)
+            .dispatch(Actions.DELETE_PLAN, plan.id)
             .then((data) => {
               console.log("delete", data);
-              showSuccessMsgbox("User has been successfully deleted!");
+              showSuccessMsgbox("Plan has been successfully deleted!").then(
+                () => {
+                  const index = plans.value.findIndex((x) => x.id === plan.id);
+                  if (index >= 0) {
+                    plans.value.splice(index, 1);
+                  }
+                }
+              );
             })
             .catch((data) => {
               console.error("error", data);
@@ -278,18 +218,26 @@ export default defineComponent({
       });
     };
 
+    const getPlans = () => {
+      store
+        .dispatch(Actions.PLAN_LIST)
+        .then((data) => {
+          plans.value = data.plans;
+          console.log("plans", data.plans);
+        })
+        .catch((data) => {
+          console.error("error", data);
+        });
+    };
+
     onMounted(() => {
-      setCurrentPageTitle("Users");
-      updatePage(1);
+      setCurrentPageTitle("Plans");
+      getPlans();
     });
 
     return {
-      userList,
-      totalCount,
-      pageNumber,
-      pageSize,
-      updatePage,
-      deleteUser,
+      plans,
+      deletePlan,
     };
   },
 });

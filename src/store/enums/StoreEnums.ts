@@ -15,7 +15,11 @@ enum Actions {
   USER_LIST = "userList",
   NEW_USER = "newUser",
   CREATE_USER = "createUser",
+  DELETE_USER = "deleteUser",
   SERVER_LIST = "serverList",
+  PLAN_LIST = "planList",
+  CREATE_PLAN = "createPlan",
+  DELETE_PLAN = "deletePlan",
 }
 
 enum Mutations {

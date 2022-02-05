@@ -54,6 +54,22 @@ export default class AdminModule extends VuexModule {
   }
 
   @Action
+  [Actions.DELETE_USER](userId) {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.delete(`admin/users/${userId}`)
+          .then(({ data }) => {
+            data.success ? resolve(data.data) : reject(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
+
+  @Action
   [Actions.SERVER_LIST](params) {
     if (JwtService.getToken()) {
       ApiService.setHeader();
@@ -61,6 +77,53 @@ export default class AdminModule extends VuexModule {
         ApiService.query("admin/servers", { params })
           .then(({ data }) => {
             resolve(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
+  @Action
+  [Actions.PLAN_LIST]() {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.get("admin/plans")
+          .then(({ data }) => {
+            data.success ? resolve(data.data) : reject(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
+
+  @Action
+  [Actions.CREATE_PLAN](payload) {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.post("admin/plans", payload)
+          .then(({ data }) => {
+            data.success ? resolve(data.data) : reject(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
+
+  @Action
+  [Actions.DELETE_PLAN](planId) {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.delete(`admin/plans/${planId}`)
+          .then(({ data }) => {
+            data.success ? resolve(data.data) : reject(data);
           })
           .catch(({ response }) => {
             reject(response.data);

@@ -36,6 +36,40 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/pages/servers/Servers.vue"),
       },
       {
+        path: "/payments",
+        name: "payments",
+        component: () => import("@/views/pages/payments/Index.vue"),
+        children: [
+          {
+            path: "",
+            name: "payments-list",
+            component: () => import("@/views/pages/payments/Payments.vue"),
+          },
+          {
+            path: "create",
+            name: "payments-create",
+            component: () => import("@/views/pages/payments/CreateUser.vue"),
+          },
+        ],
+      },
+      {
+        path: "/plans",
+        name: "plans",
+        component: () => import("@/views/pages/plans/Index.vue"),
+        children: [
+          {
+            path: "",
+            name: "plans-list",
+            component: () => import("@/views/pages/plans/Plans.vue"),
+          },
+          {
+            path: "create",
+            name: "plans-create",
+            component: () => import("@/views/pages/plans/CreatePlan.vue"),
+          },
+        ],
+      },
+      {
         path: "/builder",
         name: "builder",
         component: () => import("@/views/Builder.vue"),

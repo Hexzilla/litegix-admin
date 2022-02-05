@@ -6,11 +6,7 @@
         <!--begin::Header-->
         <div class="card-header border-0 pt-5">
           <h3 class="card-title align-items-start flex-column">
-            <span class="card-label fw-bolder fs-3 mb-1">Users</span>
-
-            <span class="text-muted mt-1 fw-bold fs-7"
-              >Total {{ totalCount }} users</span
-            >
+            <span class="card-label fw-bolder fs-3 mb-1">Payments</span>
           </h3>
 
           <div
@@ -227,10 +223,11 @@ import { Actions } from "@/store/enums/StoreEnums";
 import { setCurrentPageTitle } from "@/core/helpers/breadcrumb";
 import { useStore } from "vuex";
 import { showConfirmMsgbox, showSuccessMsgbox } from "@/views/msgbox.js";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 import Pagination from "@/components/Pagination.vue";
 
 export default defineComponent({
-  name: "users",
+  name: "payments",
   components: {
     Pagination,
   },
@@ -279,7 +276,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      setCurrentPageTitle("Users");
+      setCurrentPageTitle("Payments");
       updatePage(1);
     });
 

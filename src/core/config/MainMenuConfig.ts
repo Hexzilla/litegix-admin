@@ -19,6 +19,30 @@ const DocMenuConfig = [
         svgIcon: "media/icons/duotune/communication/com006.svg",
         fontIcon: "bi-layers",
       },
+      {
+        heading: "plans",
+        route: "/plans",
+        svgIcon: "media/icons/duotune/communication/com006.svg",
+        fontIcon: "bi-layers",
+      },
+      {
+        heading: "subscriptions",
+        route: "/subscriptions",
+        svgIcon: "media/icons/duotune/communication/com006.svg",
+        fontIcon: "bi-layers",
+      },
+      {
+        heading: "payment",
+        route: "/payments",
+        svgIcon: "media/icons/duotune/communication/com006.svg",
+        fontIcon: "bi-layers",
+      },
+      {
+        heading: "logs",
+        route: "/logs",
+        svgIcon: "media/icons/duotune/communication/com006.svg",
+        fontIcon: "bi-layers",
+      },
     ],
   },
   {
