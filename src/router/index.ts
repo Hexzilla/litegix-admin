@@ -65,7 +65,12 @@ const routes: Array<RouteRecordRaw> = [
           {
             path: "create",
             name: "plans-create",
-            component: () => import("@/views/pages/plans/CreatePlan.vue"),
+            component: () => import("@/views/pages/plans/Create.vue"),
+          },
+          {
+            path: "edit",
+            name: "plans-edit",
+            component: () => import("@/views/pages/plans/Edit.vue"),
           },
         ],
       },

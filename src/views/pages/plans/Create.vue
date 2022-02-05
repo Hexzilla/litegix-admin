@@ -12,7 +12,7 @@
     >
       <!--begin::Card title-->
       <div class="card-title m-0">
-        <h3 class="fw-bolder m-0">Create New Subscription</h3>
+        <h3 class="fw-bolder m-0">Create New Plan</h3>
       </div>
       <!--end::Card title-->
     </div>
@@ -118,7 +118,6 @@ import { useStore } from "vuex";
 import { Actions } from "@/store/enums/StoreEnums";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
-import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as Yup from "yup";
 import { showSuccessMsgbox } from "@/views/msgbox";
 

@@ -64,8 +64,8 @@
                     </div>
                   </th>
                   <th class="min-w-150px">Name</th>
-                  <th class="min-w-140px">Price</th>
-                  <th class="min-w-120px">Created Date</th>
+                  <th class="min-w-150px">Price</th>
+                  <th class="min-w-150px">Last Date</th>
                   <th class="min-w-100px text-end">Actions</th>
                 </tr>
               </thead>
@@ -95,7 +95,9 @@
                     <td>
                       <div class="d-flex align-items-center">
                         <div class="d-flex justify-content-start flex-column">
-                          <span class="fw-bold d-block fs-7">
+                          <span
+                            class="text-dark fw-bolder text-hover-primary fs-6"
+                          >
                             {{ item.name }}
                           </span>
                         </div>
@@ -105,7 +107,9 @@
                     <td class="text-end">
                       <div class="d-flex flex-column w-100 me-2">
                         <div class="d-flex flex-stack mb-2">
-                          <span class="fw-bold d-block fs-7">
+                          <span
+                            class="text-dark fw-bolder text-hover-primary fs-6"
+                          >
                             {{ item.price }}
                           </span>
                         </div>
@@ -113,14 +117,15 @@
                     </td>
 
                     <td>
-                      <span class="fw-bold d-block fs-7">{{
-                        item.createdAt
-                      }}</span>
+                      <span
+                        class="text-dark fw-bolder text-hover-primary fs-6"
+                        >{{ item.updatedAt }}</span
+                      >
                     </td>
 
                     <td class="text-end">
-                      <a
-                        href="#"
+                      <router-link
+                        to="/plans/edit"
                         class="
                           btn
                           btn-icon
@@ -135,7 +140,7 @@
                             src="media/icons/duotune/art/art005.svg"
                           />
                         </span>
-                      </a>
+                      </router-link>
 
                       <a
                         href="#"
@@ -183,6 +188,7 @@ interface Plan {
   name: string;
   price: number;
   createdAt: string;
+  updatedAt: string;
 }
 
 export default defineComponent({

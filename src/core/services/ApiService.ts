@@ -21,7 +21,7 @@ class ApiService {
     ApiService.vueInstance.use(VueAxios, axios);
     ApiService.vueInstance.axios.defaults.baseURL =
       process.env.NODE_ENV === "production"
-        ? "http://5.161.73.6:8080/"
+        ? "https://litegix.herokuapp.com"
         : "http://localhost:3000";
   }
 
