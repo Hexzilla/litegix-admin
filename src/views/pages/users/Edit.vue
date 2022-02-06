@@ -2,17 +2,10 @@
   <!--begin::Basic info-->
   <div class="card mb-5 mb-xl-10">
     <!--begin::Card header-->
-    <div
-      class="card-header border-0 cursor-pointer"
-      role="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#kt_account_profile_details"
-      aria-expanded="true"
-      aria-controls="kt_account_profile_details"
-    >
+    <div class="card-header border-0 cursor-pointer" role="button">
       <!--begin::Card title-->
       <div class="card-title m-0">
-        <h3 class="fw-bolder m-0">Create New User</h3>
+        <h3 class="fw-bolder m-0">Edit User</h3>
       </div>
       <!--end::Card title-->
     </div>
@@ -26,7 +19,7 @@
         class="form"
         novalidate="novalidate"
         @submit="createUser()"
-        :validation-schema="profileDetailsValidator"
+        :validation-schema="userDetailsValidator"
       >
         <!--begin::Card body-->
         <div class="card-body border-top p-9">
@@ -45,7 +38,7 @@
                 name="username"
                 class="form-control form-control-lg form-control-solid"
                 placeholder="User name"
-                v-model="profileDetails.username"
+                v-model="userDetails.username"
               />
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
@@ -72,7 +65,7 @@
                 name="email"
                 class="form-control form-control-lg form-control-solid"
                 placeholder="Email"
-                v-model="profileDetails.email"
+                v-model="userDetails.email"
               />
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
@@ -99,7 +92,7 @@
                 name="password"
                 class="form-control form-control-lg form-control-solid"
                 placeholder="Password"
-                v-model="profileDetails.password"
+                v-model="userDetails.password"
               />
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
@@ -124,7 +117,7 @@
                 name="company"
                 class="form-control form-control-lg form-control-solid"
                 placeholder="Company name"
-                v-model="profileDetails.company"
+                v-model="userDetails.company"
               />
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
@@ -148,7 +141,7 @@
                 as="select"
                 name="country"
                 class="form-select form-select-solid form-select-lg fw-bold"
-                v-model="profileDetails.country"
+                v-model="userDetails.country"
               >
                 <option
                   v-for="(country, index) in countries"
@@ -182,7 +175,7 @@
                 as="select"
                 name="timezone"
                 class="form-select form-select-solid form-select-lg"
-                v-model="profileDetails.timezone"
+                v-model="userDetails.timezone"
               >
                 <option
                   v-for="(timezone, index) in timezones"
@@ -215,7 +208,7 @@
                 as="select"
                 name="currency"
                 class="form-select form-select-solid form-select-lg"
-                v-model="profileDetails.currency"
+                v-model="userDetails.currency"
               >
                 <option data-kt-flag="flags/united-states.svg" value="USD">
                   <b>USD</b>&#160;-&#160;USA dollar
@@ -263,10 +256,10 @@
           <button
             type="submit"
             id="kt_account_profile_details_submit"
-            ref="submitButton1"
+            ref="submitButton"
             class="btn btn-primary"
           >
-            <span class="indicator-label"> Create New User </span>
+            <span class="indicator-label"> Save </span>
             <span class="indicator-progress">
               Please wait...
               <span
@@ -287,13 +280,14 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 import { Actions } from "@/store/enums/StoreEnums";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as Yup from "yup";
 
-interface ProfileDetails {
+interface User {
   email: string;
   username: string;
   password: string;
@@ -304,7 +298,7 @@ interface ProfileDetails {
 }
 
 export default defineComponent({
-  name: "account-settings",
+  name: "user-edit",
   components: {
     ErrorMessage,
     Field,
@@ -312,14 +306,12 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    const submitButton1 = ref<HTMLElement | null>(null);
-    const updateEmailButton = ref<HTMLElement | null>(null);
-    const updatePasswordButton = ref<HTMLElement | null>(null);
+    const route = useRoute();
+    const userId = route.params.userId;
 
-    const emailFormDisplay = ref(false);
-    const passwordFormDisplay = ref(false);
+    const submitButton = ref<HTMLElement | null>(null);
 
-    const profileDetailsValidator = Yup.object().shape({
+    const userDetailsValidator = Yup.object().shape({
       email: Yup.string().required().email().label("Email"),
       username: Yup.string().required().label("Username"),
       company: Yup.string().label("Company"),
@@ -328,22 +320,7 @@ export default defineComponent({
       currency: Yup.string().required().label("Currency"),
     });
 
-    const changeEmail = Yup.object().shape({
-      emailaddress: Yup.string().required().email().label("Email"),
-      confirmemailpassword: Yup.string().required().label("Password"),
-    });
-
-    const changePassword = Yup.object().shape({
-      currentpassword: Yup.string().required().label("Current password"),
-      newpassword: Yup.string().min(4).required().label("Password"),
-      confirmpassword: Yup.string()
-        .min(4)
-        .required()
-        .oneOf([Yup.ref("newpassword"), null], "Passwords must match")
-        .label("Password Confirmation"),
-    });
-
-    const profileDetails = ref<ProfileDetails>({
+    const userDetails = ref<User>({
       email: "",
       username: "",
       password: "",
@@ -354,12 +331,12 @@ export default defineComponent({
     });
 
     const createUser = () => {
-      if (submitButton1.value) {
+      if (submitButton.value) {
         // Activate indicator
-        submitButton1.value.setAttribute("data-kt-indicator", "on");
+        submitButton.value.setAttribute("data-kt-indicator", "on");
 
         store
-          .dispatch(Actions.CREATE_USER, profileDetails.value)
+          .dispatch(Actions.CREATE_USER, userDetails.value)
           .then((data) => {
             console.log("success", data);
 
@@ -377,46 +354,8 @@ export default defineComponent({
             console.error("error", data);
           })
           .finally(() => {
-            submitButton1.value?.removeAttribute("data-kt-indicator");
+            submitButton.value?.removeAttribute("data-kt-indicator");
           });
-      }
-    };
-
-    const updateEmail = () => {
-      console.log(updateEmailButton.value);
-
-      if (updateEmailButton.value) {
-        // Activate indicator
-        updateEmailButton.value.setAttribute("data-kt-indicator", "on");
-
-        setTimeout(() => {
-          updateEmailButton.value?.removeAttribute("data-kt-indicator");
-
-          emailFormDisplay.value = false;
-        }, 2000);
-      }
-    };
-
-    const updatePassword = () => {
-      if (updatePasswordButton.value) {
-        // Activate indicator
-        updatePasswordButton.value.setAttribute("data-kt-indicator", "on");
-
-        setTimeout(() => {
-          updatePasswordButton.value?.removeAttribute("data-kt-indicator");
-
-          Swal.fire({
-            text: "Password is successfully changed!",
-            icon: "success",
-            confirmButtonText: "Ok",
-            buttonsStyling: false,
-            customClass: {
-              confirmButton: "btn btn-light-primary",
-            },
-          }).then(() => {
-            passwordFormDisplay.value = false;
-          });
-        }, 2000);
       }
     };
 
@@ -424,7 +363,7 @@ export default defineComponent({
     const timezones = ref([]);
 
     onMounted(() => {
-      setCurrentPageBreadcrumbs("Create", ["Users"]);
+      setCurrentPageBreadcrumbs("Edit", ["Users"]);
 
       store
         .dispatch(Actions.NEW_USER)
@@ -435,23 +374,24 @@ export default defineComponent({
         .catch((data) => {
           console.error("error", data);
         });
+
+      store
+        .dispatch(Actions.GET_USER)
+        .then((data) => {
+          userDetails.value = data.user;
+        })
+        .catch((data) => {
+          console.error("error", data);
+        });
     });
 
     return {
-      submitButton1,
+      submitButton,
       createUser,
       countries,
       timezones,
-      profileDetails,
-      emailFormDisplay,
-      passwordFormDisplay,
-      profileDetailsValidator,
-      changeEmail,
-      changePassword,
-      updateEmailButton,
-      updatePasswordButton,
-      updateEmail,
-      updatePassword,
+      userDetails,
+      userDetailsValidator,
     };
   },
 });

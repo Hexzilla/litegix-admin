@@ -22,6 +22,22 @@ export default class AdminModule extends VuexModule {
   }
 
   @Action
+  [Actions.GET_USER](userId) {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.get(`admin/users/${userId}`)
+          .then(({ data }) => {
+            data.success ? resolve(data.data) : reject(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
+
+  @Action
   [Actions.NEW_USER]() {
     if (JwtService.getToken()) {
       ApiService.setHeader();

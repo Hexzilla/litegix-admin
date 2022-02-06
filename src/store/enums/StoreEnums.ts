@@ -13,6 +13,7 @@ enum Actions {
   FORGOT_PASSWORD = "forgotPassword",
   SET_BREADCRUMB_ACTION = "setBreadcrumbAction",
   USER_LIST = "userList",
+  GET_USER = "getUser",
   NEW_USER = "newUser",
   CREATE_USER = "createUser",
   DELETE_USER = "deleteUser",

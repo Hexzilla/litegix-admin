@@ -143,51 +143,17 @@
                     </td>
 
                     <td class="text-end">
-                      <a
-                        href="#"
-                        class="
-                          btn
-                          btn-icon
-                          btn-bg-light
-                          btn-active-color-primary
-                          btn-sm
-                          me-1
-                        "
-                      >
-                        <span class="svg-icon svg-icon-3">
-                          <inline-svg
-                            src="media/icons/duotune/general/gen019.svg"
-                          />
-                        </span>
-                      </a>
-
-                      <a
-                        href="#"
-                        class="
-                          btn
-                          btn-icon
-                          btn-bg-light
-                          btn-active-color-primary
-                          btn-sm
-                          me-1
-                        "
-                      >
+                      <router-link :to="getEditUrl(user)" :class="iconClass">
                         <span class="svg-icon svg-icon-3">
                           <inline-svg
                             src="media/icons/duotune/art/art005.svg"
                           />
                         </span>
-                      </a>
+                      </router-link>
 
                       <a
                         href="#"
-                        class="
-                          btn
-                          btn-icon
-                          btn-bg-light
-                          btn-active-color-primary
-                          btn-sm
-                        "
+                        :class="iconClass"
                         v-on:click="deleteUser($event, user)"
                       >
                         <span class="svg-icon svg-icon-3">
@@ -196,6 +162,19 @@
                           />
                         </span>
                       </a>
+
+                      <button
+                        type="button"
+                        :class="iconClass"
+                        data-kt-menu-trigger="click"
+                        data-kt-menu-placement="bottom-end"
+                        data-kt-menu-flip="top-end"
+                      >
+                        <span class="svg-icon svg-icon-3">
+                          <i class="bi bi-three-dots fs-5"></i>
+                        </span>
+                        <Dropdown></Dropdown>
+                      </button>
                     </td>
                   </tr>
                 </template>
@@ -228,11 +207,13 @@ import { setCurrentPageTitle } from "@/core/helpers/breadcrumb";
 import { useStore } from "vuex";
 import { showConfirmMsgbox, showSuccessMsgbox } from "@/views/msgbox.js";
 import Pagination from "@/components/Pagination.vue";
+import Dropdown from "./Dropdown.vue";
 
 export default defineComponent({
   name: "users",
   components: {
     Pagination,
+    Dropdown,
   },
   setup() {
     const store = useStore();
@@ -241,6 +222,9 @@ export default defineComponent({
     const pageNumber = ref(1);
     const pageSize = ref(5);
     const totalCount = ref(0);
+    const iconClass = ref(
+      "btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+    );
 
     const updatePage = (page: number) => {
       console.log("updatePage", page);
@@ -278,6 +262,10 @@ export default defineComponent({
       });
     };
 
+    const getEditUrl = (user) => {
+      return `/users/edit/${user.id}`;
+    };
+
     onMounted(() => {
       setCurrentPageTitle("Users");
       updatePage(1);
@@ -288,8 +276,10 @@ export default defineComponent({
       totalCount,
       pageNumber,
       pageSize,
+      iconClass,
       updatePage,
       deleteUser,
+      getEditUrl,
     };
   },
 });
