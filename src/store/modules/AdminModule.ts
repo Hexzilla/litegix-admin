@@ -100,6 +100,55 @@ export default class AdminModule extends VuexModule {
       });
     }
   }
+
+  @Action
+  [Actions.CREATE_SERVER](payload) {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.post("admin/servers", payload)
+          .then(({ data }) => {
+            data.success ? resolve(data.data) : reject(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
+
+  @Action
+  [Actions.DELETE_SERVER](serverId) {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.delete(`admin/servers/${serverId}`)
+          .then(({ data }) => {
+            data.success ? resolve(data.data) : reject(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
+
+  @Action
+  [Actions.NEW_SERVER]() {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.get("admin/servers/new")
+          .then(({ data }) => {
+            data.success ? resolve(data.data) : reject(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
+
   @Action
   [Actions.PLAN_LIST]() {
     if (JwtService.getToken()) {

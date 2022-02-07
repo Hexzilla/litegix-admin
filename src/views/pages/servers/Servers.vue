@@ -18,17 +18,15 @@
             data-bs-trigger="hover"
             title="Click to add a user"
           >
-            <a
-              href="#"
+            <router-link
+              to="/servers/create"
               class="btn btn-sm btn-light-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#kt_modal_invite_friends"
             >
               <span class="svg-icon svg-icon-3">
                 <inline-svg src="media/icons/duotune/arrows/arr075.svg" />
               </span>
               New User
-            </a>
+            </router-link>
           </div>
         </div>
         <!--end::Header-->
@@ -227,10 +225,13 @@ import { defineComponent } from "vue";
 import { Actions } from "@/store/enums/StoreEnums";
 import { setCurrentPageTitle } from "@/core/helpers/breadcrumb";
 import { useStore } from "vuex";
+import Pagination from "@/components/Pagination.vue";
 
 export default defineComponent({
   name: "servers",
-  components: {},
+  components: {
+    Pagination,
+  },
   data() {
     return {
       serverList: [],

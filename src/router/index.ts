@@ -38,7 +38,19 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "/servers",
         name: "servers",
-        component: () => import("@/views/pages/servers/Servers.vue"),
+        component: () => import("@/views/pages/servers/Index.vue"),
+        children: [
+          {
+            path: "",
+            name: "servers-list",
+            component: () => import("@/views/pages/servers/Servers.vue"),
+          },
+          {
+            path: "create",
+            name: "servers-create",
+            component: () => import("@/views/pages/servers/Create.vue"),
+          }
+        ],
       },
       {
         path: "/payments",
