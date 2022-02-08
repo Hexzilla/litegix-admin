@@ -19,6 +19,7 @@ enum Actions {
   DELETE_USER = "deleteUser",
   SERVER_LIST = "serverList",
   CREATE_SERVER = "createServer",
+  GET_SERVER = "getServer",
   DELETE_SERVER = "deleteServer",
   NEW_SERVER = "newServer",
   PLAN_LIST = "planList",

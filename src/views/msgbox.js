@@ -34,9 +34,9 @@ export const showErrorMsgbox = function (text) {
     icon: "error",
     buttonsStyling: false,
     heightAuto: true,
-    confirmButtonText: "Ok, got it!",
+    confirmButtonText: "Try again!",
     customClass: {
-      confirmButton: "btn fw-bold btn-light-primary",
+      confirmButton: "btn fw-bold btn-light-danger",
     },
   });
 };

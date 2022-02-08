@@ -1,7 +1,7 @@
 import ApiService from "@/core/services/ApiService";
 import JwtService from "@/core/services/JwtService";
 import { Actions } from "@/store/enums/StoreEnums";
-import { Module, Action, VuexModule } from "vuex-module-decorators";
+import { Module, Action, VuexModule, Mutation } from "vuex-module-decorators";
 
 @Module
 export default class AdminModule extends VuexModule {
@@ -107,6 +107,22 @@ export default class AdminModule extends VuexModule {
       ApiService.setHeader();
       return new Promise<void>((resolve, reject) => {
         ApiService.post("admin/servers", payload)
+          .then(({ data }) => {
+            data.success ? resolve(data.data) : reject(data);
+          })
+          .catch(({ response }) => {
+            reject(response.data);
+          });
+      });
+    }
+  }
+
+  @Action
+  [Actions.GET_SERVER](serverId) {
+    if (JwtService.getToken()) {
+      ApiService.setHeader();
+      return new Promise<void>((resolve, reject) => {
+        ApiService.get(`admin/servers/${serverId}`)
           .then(({ data }) => {
             data.success ? resolve(data.data) : reject(data);
           })

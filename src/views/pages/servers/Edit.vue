@@ -5,7 +5,7 @@
     <div class="card-header border-0 cursor-pointer" role="button">
       <!--begin::Card title-->
       <div class="card-title m-0">
-        <h3 class="fw-bolder m-0">Create New Server</h3>
+        <h3 class="fw-bolder m-0">Edit Server</h3>
       </div>
       <!--end::Card title-->
     </div>
@@ -173,7 +173,7 @@
             ref="submitButton"
             class="btn btn-primary"
           >
-            <span class="indicator-label"> Create</span>
+            <span class="indicator-label"> Update</span>
             <span class="indicator-progress">
               Please wait...
               <span
@@ -199,7 +199,7 @@ import { ErrorMessage, Field, Form } from "vee-validate";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as Yup from "yup";
-import { showErrorMsgbox } from "@/views/msgbox";
+import { useRoute } from "vue-router";
 
 interface Server {
   name: string;
@@ -210,7 +210,7 @@ interface Server {
 }
 
 export default defineComponent({
-  name: "server-create",
+  name: "server-edit",
   components: {
     ErrorMessage,
     Field,
@@ -218,6 +218,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const route = useRoute();
+    const serverId = route.params.serverId;
+
     const submitButton = ref<HTMLElement | null>(null);
 
     const serverDetailsValidator = Yup.object().shape({
@@ -258,7 +261,6 @@ export default defineComponent({
           })
           .catch((data) => {
             console.error("error", data);
-            showErrorMsgbox("Server name or address has already been taken!");
           })
           .finally(() => {
             submitButton.value?.removeAttribute("data-kt-indicator");
@@ -267,7 +269,16 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      setCurrentPageBreadcrumbs("Create", ["Servers"]);
+      setCurrentPageBreadcrumbs("Edit", ["Servers"]);
+
+      store
+        .dispatch(Actions.GET_SERVER, serverId)
+        .then((data) => {
+          serverDetails.value = data.server;
+        })
+        .catch((data) => {
+          console.error("error", data);
+        });
     });
 
     return {

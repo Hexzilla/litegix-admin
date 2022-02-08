@@ -49,7 +49,12 @@ const routes: Array<RouteRecordRaw> = [
             path: "create",
             name: "servers-create",
             component: () => import("@/views/pages/servers/Create.vue"),
-          }
+          },
+          {
+            path: "edit/:serverId",
+            name: "servers-edit",
+            component: () => import("@/views/pages/servers/Edit.vue"),
+          },
         ],
       },
       {
