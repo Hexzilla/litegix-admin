@@ -1,7 +1,16 @@
 <template>
   <!--begin::Pagination-->
   <div class="d-flex flex-stack flex-wrap pt-10">
-    <div class="fs-6 fw-bold text-gray-700">Showing 1 to 10 of 50 entries</div>
+    <div class="fs-6 fw-bold text-gray-700">
+      <div v-if="size * getPage() < total">
+        Showing {{ size * (getPage() - 1) + 1 }} to {{ size * getPage() }} of
+        {{ total }} entries
+      </div>
+      <div v-else>
+        Showing {{ size * (getPage() - 1) + 1 }} to {{ total }} of
+        {{ total }} entries
+      </div>
+    </div>
 
     <!--begin::Pages-->
     <ul class="pagination">
