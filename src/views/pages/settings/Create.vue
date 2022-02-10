@@ -5,7 +5,7 @@
     <div class="card-header border-0 cursor-pointer" role="button">
       <!--begin::Card title-->
       <div class="card-title m-0">
-        <h3 class="fw-bolder m-0">Create New Server</h3>
+        <h3 class="fw-bolder m-0">Create New User</h3>
       </div>
       <!--end::Card title-->
     </div>
@@ -18,8 +18,8 @@
         id="kt_account_profile_details_form"
         class="form"
         novalidate="novalidate"
-        @submit="createServer()"
-        :validation-schema="serverDetailsValidator"
+        @submit="createUser()"
+        :validation-schema="userDetailsValidator"
       >
         <!--begin::Card body-->
         <div class="card-body border-top p-9">
@@ -27,7 +27,7 @@
           <div class="row mb-6">
             <!--begin::Label-->
             <label class="col-lg-4 col-form-label required fw-bold fs-6"
-              >Name</label
+              >Username</label
             >
             <!--end::Label-->
 
@@ -35,14 +35,14 @@
             <div class="col-lg-8 fv-row">
               <Field
                 type="text"
-                name="name"
+                name="username"
                 class="form-control form-control-lg form-control-solid"
-                placeholder="Name"
-                v-model="serverDetails.name"
+                placeholder="User name"
+                v-model="userDetails.username"
               />
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
-                  <ErrorMessage name="name" />
+                  <ErrorMessage name="username" />
                 </div>
               </div>
             </div>
@@ -54,22 +54,74 @@
           <div class="row mb-6">
             <!--begin::Label-->
             <label class="col-lg-4 col-form-label required fw-bold fs-6"
-              >Address</label
+              >Email</label
             >
+            <!--end::Label-->
+
+            <!--begin::Col-->
+            <div class="col-lg-8 fv-row">
+              <Field
+                type="email"
+                name="email"
+                class="form-control form-control-lg form-control-solid"
+                placeholder="Email"
+                v-model="userDetails.email"
+              />
+              <div class="fv-plugins-message-container">
+                <div class="fv-help-block">
+                  <ErrorMessage name="email" />
+                </div>
+              </div>
+            </div>
+            <!--end::Col-->
+          </div>
+          <!--end::Input group-->
+
+          <!--begin::Input group-->
+          <div class="row mb-6">
+            <!--begin::Label-->
+            <label class="col-lg-4 col-form-label required fw-bold fs-6"
+              >Password</label
+            >
+            <!--end::Label-->
+
+            <!--begin::Col-->
+            <div class="col-lg-8 fv-row">
+              <Field
+                type="password"
+                name="password"
+                class="form-control form-control-lg form-control-solid"
+                placeholder="Password"
+                v-model="userDetails.password"
+              />
+              <div class="fv-plugins-message-container">
+                <div class="fv-help-block">
+                  <ErrorMessage name="password" />
+                </div>
+              </div>
+            </div>
+            <!--end::Col-->
+          </div>
+          <!--end::Input group-->
+
+          <!--begin::Input group-->
+          <div class="row mb-6">
+            <!--begin::Label-->
+            <label class="col-lg-4 col-form-label fw-bold fs-6">Company</label>
             <!--end::Label-->
 
             <!--begin::Col-->
             <div class="col-lg-8 fv-row">
               <Field
                 type="text"
-                name="address"
+                name="company"
                 class="form-control form-control-lg form-control-solid"
-                placeholder="Address"
-                v-model="serverDetails.address"
+                placeholder="Company name"
+                v-model="userDetails.company"
               />
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
-                  <ErrorMessage name="address" />
+                  <ErrorMessage name="company" />
                 </div>
               </div>
             </div>
@@ -80,30 +132,28 @@
           <!--begin::Input group-->
           <div class="row mb-6">
             <!--begin::Label-->
-            <label class="col-lg-4 col-form-label required fw-bold fs-6"
-              >Web Server</label
-            >
+            <label class="col-lg-4 col-form-label fw-bold fs-6">Country</label>
             <!--end::Label-->
 
             <!--begin::Col-->
             <div class="col-lg-8 fv-row">
               <Field
                 as="select"
-                name="webserver"
-                class="form-select form-select-solid form-select-lg"
-                v-model="serverDetails.webserver"
+                name="country"
+                class="form-select form-select-solid form-select-lg fw-bold"
+                v-model="userDetails.country"
               >
                 <option
-                  v-for="(ws, index) in webservers"
+                  v-for="(country, index) in countries"
                   :key="index"
-                  :value="ws.value"
+                  :value="country.v"
                 >
-                  {{ ws.text }}
+                  {{ country.t }}
                 </option>
               </Field>
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
-                  <ErrorMessage name="webserver" />
+                  <ErrorMessage name="country" />
                 </div>
               </div>
             </div>
@@ -114,8 +164,8 @@
           <!--begin::Input group-->
           <div class="row mb-6">
             <!--begin::Label-->
-            <label class="col-lg-4 col-form-label required fw-bold fs-6"
-              >Database</label
+            <label class="col-lg-4 col-form-label fw-bold fs-6"
+              >Time Zone</label
             >
             <!--end::Label-->
 
@@ -123,21 +173,22 @@
             <div class="col-lg-8 fv-row">
               <Field
                 as="select"
-                name="database"
+                name="timezone"
                 class="form-select form-select-solid form-select-lg"
-                v-model="serverDetails.database"
+                v-model="userDetails.timezone"
               >
                 <option
-                  v-for="(item, index) in databases"
+                  v-for="(timezone, index) in timezones"
                   :key="index"
-                  :value="item.value"
+                  :data-bs-offset="timezone.o"
+                  :value="timezone.v"
                 >
-                  {{ item.text }}
+                  {{ timezone.t }}
                 </option>
               </Field>
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
-                  <ErrorMessage name="database" />
+                  <ErrorMessage name="timezone" />
                 </div>
               </div>
             </div>
@@ -148,30 +199,42 @@
           <!--begin::Input group-->
           <div class="row mb-6">
             <!--begin::Label-->
-            <label class="col-lg-4 col-form-label required fw-bold fs-6"
-              >PHP Version</label
-            >
+            <label class="col-lg-4 col-form-label fw-bold fs-6">Currency</label>
             <!--end::Label-->
 
             <!--begin::Col-->
             <div class="col-lg-8 fv-row">
               <Field
                 as="select"
-                name="phpVersion"
+                name="currency"
                 class="form-select form-select-solid form-select-lg"
-                v-model="serverDetails.phpVersion"
+                v-model="userDetails.currency"
               >
-                <option
-                  v-for="(item, index) in phpVersions"
-                  :key="index"
-                  :value="item.value"
-                >
-                  {{ item.text }}
+                <option data-kt-flag="flags/united-states.svg" value="USD">
+                  <b>USD</b>&#160;-&#160;USA dollar
+                </option>
+                <option data-kt-flag="flags/united-kingdom.svg" value="GBP">
+                  <b>GBP</b>&#160;-&#160;British pound
+                </option>
+                <option data-kt-flag="flags/australia.svg" value="AUD">
+                  <b>AUD</b>&#160;-&#160;Australian dollar
+                </option>
+                <option data-kt-flag="flags/japan.svg" value="JPY">
+                  <b>JPY</b>&#160;-&#160;Japanese yen
+                </option>
+                <option data-kt-flag="flags/sweden.svg" value="SEK">
+                  <b>SEK</b>&#160;-&#160;Swedish krona
+                </option>
+                <option data-kt-flag="flags/canada.svg" value="CAD">
+                  <b>CAD</b>&#160;-&#160;Canadian dollar
+                </option>
+                <option data-kt-flag="flags/switzerland.svg" value="CHF">
+                  <b>CHF</b>&#160;-&#160;Swiss franc
                 </option>
               </Field>
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
-                  <ErrorMessage name="phpVersion" />
+                  <ErrorMessage name="currency" />
                 </div>
               </div>
             </div>
@@ -196,7 +259,7 @@
             ref="submitButton"
             class="btn btn-primary"
           >
-            <span class="indicator-label"> Create</span>
+            <span class="indicator-label"> Create New User </span>
             <span class="indicator-progress">
               Please wait...
               <span
@@ -222,18 +285,19 @@ import { ErrorMessage, Field, Form } from "vee-validate";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as Yup from "yup";
-import { showErrorMsgbox } from "@/views/msgbox";
 
-interface Server {
-  name: string;
-  address: string;
-  webserver: string;
-  database: string;
-  phpVersion: string;
+interface User {
+  email: string;
+  username: string;
+  password: string;
+  company: string;
+  country: string;
+  timezone: string;
+  currency: string;
 }
 
 export default defineComponent({
-  name: "server-create",
+  name: "user-create",
   components: {
     ErrorMessage,
     Field,
@@ -243,36 +307,39 @@ export default defineComponent({
     const store = useStore();
     const submitButton = ref<HTMLElement | null>(null);
 
-    const serverDetailsValidator = Yup.object().shape({
-      name: Yup.string().required().label("Name"),
-      address: Yup.string().required().label("Address"),
-      webserver: Yup.string().label("Web Server"),
-      database: Yup.string().required().label("Database"),
-      phpVersion: Yup.string().required().label("PHP Version"),
+    const userDetailsValidator = Yup.object().shape({
+      email: Yup.string().required().email().label("Email"),
+      username: Yup.string().required().label("Username"),
+      company: Yup.string().label("Company"),
+      country: Yup.string().required().label("Country"),
+      timezone: Yup.string().label("Timezone"),
+      currency: Yup.string().required().label("Currency"),
     });
 
-    const serverDetails = ref<Server>({
-      name: "",
-      address: "",
-      webserver: "",
-      database: "",
-      phpVersion: "",
+    const userDetails = ref<User>({
+      email: "",
+      username: "",
+      password: "",
+      company: "",
+      country: "IN",
+      timezone: "Kuala Lumpur",
+      currency: "USD",
     });
 
-    const createServer = () => {
+    const createUser = () => {
       if (submitButton.value) {
         // Activate indicator
         submitButton.value.setAttribute("data-kt-indicator", "on");
 
         store
-          .dispatch(Actions.CREATE_SERVER, serverDetails.value)
+          .dispatch(Actions.CREATE_USER, userDetails.value)
           .then((data) => {
             console.log("success", data);
 
             Swal.fire({
-              text: "Server has successfully created",
+              text: "User has successfuly created",
               icon: "success",
-              buttonStyling: false,
+              buttonsStyling: false,
               confirmButtonText: "Ok, got it!",
               customClass: {
                 confirmButton: "btn fw-bold btn-light-primary",
@@ -281,7 +348,6 @@ export default defineComponent({
           })
           .catch((data) => {
             console.error("error", data);
-            showErrorMsgbox("Server name or address has already been taken!");
           })
           .finally(() => {
             submitButton.value?.removeAttribute("data-kt-indicator");
@@ -289,20 +355,17 @@ export default defineComponent({
       }
     };
 
-    const webservers = ref([]);
-    const phpVersions = ref([]);
-    const databases = ref([]);
+    const countries = ref([]);
+    const timezones = ref([]);
 
     onMounted(() => {
-      setCurrentPageBreadcrumbs("Create", ["Servers"]);
+      setCurrentPageBreadcrumbs("Create", ["Users"]);
 
       store
-        .dispatch(Actions.NEW_SERVER)
+        .dispatch(Actions.NEW_USER)
         .then((data) => {
-          webservers.value = data.webservers;
-          phpVersions.value = data.php_versions;
-          databases.value = data.databases;
-          console.log("data", data);
+          countries.value = data.countries;
+          timezones.value = data.timezones;
         })
         .catch((data) => {
           console.error("error", data);
@@ -311,12 +374,11 @@ export default defineComponent({
 
     return {
       submitButton,
-      webservers,
-      phpVersions,
-      databases,
-      createServer,
-      serverDetails,
-      serverDetailsValidator,
+      createUser,
+      countries,
+      timezones,
+      userDetails,
+      userDetailsValidator,
     };
   },
 });

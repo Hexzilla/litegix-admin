@@ -38,6 +38,12 @@ const DocMenuConfig = [
         fontIcon: "bi-layers",
       },
       {
+        heading: "settings",
+        route: "/settings",
+        svgIcon: "media/icons/duotune/communication/com006.svg",
+        fontIcon: "bi-layers",
+      },
+      {
         heading: "logs",
         route: "/logs",
         svgIcon: "media/icons/duotune/communication/com006.svg",
