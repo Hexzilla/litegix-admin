@@ -88,12 +88,19 @@
             <!--begin::Col-->
             <div class="col-lg-8 fv-row">
               <Field
-                type="text"
+                as="select"
                 name="webserver"
-                class="form-control form-control-lg form-control-solid"
-                placeholder="Web Server"
+                class="form-select form-select-solid form-select-lg"
                 v-model="serverDetails.webserver"
-              />
+              >
+                <option
+                  v-for="(ws, index) in webservers"
+                  :key="index"
+                  :value="ws.value"
+                >
+                  {{ ws.text }}
+                </option>
+              </Field>
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
                   <ErrorMessage name="webserver" />
@@ -113,12 +120,19 @@
             <!--begin::Col-->
             <div class="col-lg-8 fv-row">
               <Field
-                type="text"
+                as="select"
                 name="database"
-                class="form-control form-control-lg form-control-solid"
-                placeholder="Database name"
+                class="form-select form-select-solid form-select-lg"
                 v-model="serverDetails.database"
-              />
+              >
+                <option
+                  v-for="(item, index) in databases"
+                  :key="index"
+                  :value="item.value"
+                >
+                  {{ item.text }}
+                </option>
+              </Field>
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
                   <ErrorMessage name="database" />
@@ -140,12 +154,19 @@
             <!--begin::Col-->
             <div class="col-lg-8 fv-row">
               <Field
-                type="text"
+                as="select"
                 name="phpVersion"
-                class="form-control form-control-lg form-control-solid"
-                placeholder="PHP Version"
+                class="form-select form-select-solid form-select-lg"
                 v-model="serverDetails.phpVersion"
-              />
+              >
+                <option
+                  v-for="(item, index) in phpVersions"
+                  :key="index"
+                  :value="item.value"
+                >
+                  {{ item.text }}
+                </option>
+              </Field>
               <div class="fv-plugins-message-container">
                 <div class="fv-help-block">
                   <ErrorMessage name="phpVersion" />
@@ -266,12 +287,31 @@ export default defineComponent({
       }
     };
 
+    const webservers = ref([]);
+    const phpVersions = ref([]);
+    const databases = ref([]);
+
     onMounted(() => {
       setCurrentPageBreadcrumbs("Create", ["Servers"]);
+
+      store
+        .dispatch(Actions.NEW_SERVER)
+        .then((data) => {
+          webservers.value = data.webservers;
+          phpVersions.value = data.php_versions;
+          databases.value = data.databases;
+          console.log("data", data);
+        })
+        .catch((data) => {
+          console.error("error", data);
+        });
     });
 
     return {
       submitButton,
+      webservers,
+      phpVersions,
+      databases,
       createServer,
       serverDetails,
       serverDetailsValidator,
