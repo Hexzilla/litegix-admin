@@ -284,17 +284,18 @@ import { useRoute } from "vue-router";
 import { Actions } from "@/store/enums/StoreEnums";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
-import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as Yup from "yup";
+import { showSuccessMsgbox } from "@/views/msgbox.js";
 
 interface User {
+  id: string;
   email: string;
   username: string;
-  password: string;
-  company: string;
-  country: string;
-  timezone: string;
-  currency: string;
+  password: string | undefined;
+  company: string | undefined;
+  country: string | undefined;
+  timezone: string | undefined;
+  currency: string | undefined;
 }
 
 export default defineComponent({
@@ -321,6 +322,7 @@ export default defineComponent({
     });
 
     const userDetails = ref<User>({
+      id: "",
       email: "",
       username: "",
       password: "",
@@ -330,33 +332,30 @@ export default defineComponent({
       currency: "USD",
     });
 
+    const submitting = ref(false);
+
     const createUser = () => {
+      if (submitting.value) {
+        return;
+      }
+      submitting.value = true;
       if (submitButton.value) {
         // Activate indicator
         submitButton.value.setAttribute("data-kt-indicator", "on");
-
-        store
-          .dispatch(Actions.CREATE_USER, userDetails.value)
-          .then((data) => {
-            console.log("success", data);
-
-            Swal.fire({
-              text: "User has successfuly created",
-              icon: "success",
-              buttonsStyling: false,
-              confirmButtonText: "Ok, got it!",
-              customClass: {
-                confirmButton: "btn fw-bold btn-light-primary",
-              },
-            });
-          })
-          .catch((data) => {
-            console.error("error", data);
-          })
-          .finally(() => {
-            submitButton.value?.removeAttribute("data-kt-indicator");
-          });
       }
+
+      store
+        .dispatch(Actions.CREATE_USER, userDetails.value)
+        .then((data) => {
+          console.log("success", data);
+          showSuccessMsgbox("User has been successfully created!");
+        })
+        .catch((data) => {
+          console.error("error", data);
+        })
+        .finally(() => {
+          submitButton.value?.removeAttribute("data-kt-indicator");
+        });
     };
 
     const countries = ref([]);
@@ -376,9 +375,10 @@ export default defineComponent({
         });
 
       store
-        .dispatch(Actions.GET_USER)
+        .dispatch(Actions.GET_USER, userId)
         .then((data) => {
-          userDetails.value = data.user;
+          userDetails.value = { ...userDetails.value, ...data.user };
+          console.log("data", userDetails.value);
         })
         .catch((data) => {
           console.error("error", data);

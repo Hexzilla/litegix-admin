@@ -285,6 +285,7 @@ import { ErrorMessage, Field, Form } from "vee-validate";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as Yup from "yup";
+import { showSuccessMsgbox } from "@/views/msgbox.js";
 
 interface User {
   email: string;
@@ -326,7 +327,13 @@ export default defineComponent({
       currency: "USD",
     });
 
+    const submitflag = ref(false);
+
     const createUser = () => {
+      if (submitflag.value) {
+        return;
+      }
+      submitflag.value = true;
       if (submitButton.value) {
         // Activate indicator
         submitButton.value.setAttribute("data-kt-indicator", "on");
@@ -335,16 +342,7 @@ export default defineComponent({
           .dispatch(Actions.CREATE_USER, userDetails.value)
           .then((data) => {
             console.log("success", data);
-
-            Swal.fire({
-              text: "User has successfuly created",
-              icon: "success",
-              buttonsStyling: false,
-              confirmButtonText: "Ok, got it!",
-              customClass: {
-                confirmButton: "btn fw-bold btn-light-primary",
-              },
-            });
+            showSuccessMsgbox("User has been successfully created!");
           })
           .catch((data) => {
             console.error("error", data);

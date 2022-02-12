@@ -185,6 +185,19 @@
           </div>
           <!--end::Table container-->
 
+          <button
+            type="button"
+            :class="iconClass"
+            data-kt-menu-trigger="click"
+            data-kt-menu-placement="bottom-end"
+            data-kt-menu-flip="top-end"
+          >
+            <span class="svg-icon svg-icon-3">
+              <i class="bi bi-three-dots fs-5"></i>
+            </span>
+            <Dropdown></Dropdown>
+          </button>
+
           <Pagination
             :page="pageNumber"
             :size="pageSize"

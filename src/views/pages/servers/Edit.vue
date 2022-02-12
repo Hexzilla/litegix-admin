@@ -274,6 +274,7 @@ export default defineComponent({
       store
         .dispatch(Actions.GET_SERVER, serverId)
         .then((data) => {
+          console.log("server-data", data);
           serverDetails.value = data.server;
         })
         .catch((data) => {
